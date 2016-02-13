@@ -1,0 +1,19 @@
+/* */
+span.icon:hover{
+  cursor:  pointer;
+}
+
+*.left{
+  float: left;
+}
+
+ul.image-upload{
+  list-style: none;
+}
+img.preview{
+  max-width: 150px;
+}
+.product-list th,
+.product-list td{
+  text-align: center;
+}
