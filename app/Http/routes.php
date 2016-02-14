@@ -20,25 +20,22 @@ Route::group(['prefix' => '/','middleware'=>['web'] ],function(){
 
 
     });
-    Route::get('test',function(){
-      if ( !empty(Auth::user()->Cart->where('status', 'pending')->first() ) ){
-        return "find";
-      }
-      else {
-        return "NO";
-      }
-    });
 });
 
+Route::get('test',function(){
+  return view('test.index');
+});
+Route::post('test',function(){
+
+  return 1 ;
+});
 
 // Admin
 Route::group(['prefix' => 'admin','namespace' => 'Admin'], function () {
 
   Route::get('login','Authenticate@index');
   Route::resource('product', 'ProductController');
-  Route::post('product/{id}/ajax','ProductController@ajax');
-
-
+  Route::post('product/{product}','ProductController@ajax');
   Route::post('product/destroy', 'ProductController@destroy' );
   Route::resource('category', 'CategoryController');
   Route::resource('/','DashBoardController');

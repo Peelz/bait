@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 use App\Product;
 use App\Category ;
@@ -159,12 +160,28 @@ class ProductController extends Controller
     }
 
 
-    public function ajax()
+    public function ajax(Request $req)
     {
-      if(Request::ajax()){
+      $path = public_path('catalog/img/product/');
+      $id = $req->id ;
+      $obj = ProductImage::find($id)->first();
+      //Update or create Image
+      if($req->action != 'destroy'){
+
+        if( !is_null($id)){
+          File::delete($obj->path);
+        }else{
+
+        }
+
+      }
+      // Delete Image
+      else{
+        File::delete($obj->path);
         return true ;
       }
-      return true ;
+
+
     }
     /**
      * Remove the specified resource from storage.

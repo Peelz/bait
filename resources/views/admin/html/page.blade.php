@@ -5,11 +5,11 @@
     <title>@yield('title')</title>
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     {!! Html::style('css/foundation.css') !!}
-    {!! Html::style('css/admin/app.css') !!}
+    {!! Html::style('backend/css/app.css') !!}
     @yield('style')
     {{ Html::script('js/vendor/jquery.min.js') }}
     {{ Html::script('js/foundation.js') }}
-    {{ Html::script('js/app.js') }}
+    {{ Html::script('backend/js/app.js') }}
 
     @yield('script')
 

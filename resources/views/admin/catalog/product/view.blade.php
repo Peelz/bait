@@ -112,8 +112,8 @@
   </div>
   <div class="row">
     <fieldset class="large-6 large-offset-6 columns" style="text-align:right;">
-      <button class="button" type="submit" value="Submit">Submit</button>
-      <button class="button" type="reset" value="Reset">Reset</button>
+      <button class="button" type="submit" value="Submit">บันทึก</button>
+
     </fieldset>
 
   </div>
