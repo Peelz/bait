@@ -170,8 +170,12 @@ class ProductController extends Controller
 
         if( !is_null($id)){
           File::delete($obj->path);
+          // new file and move
         }else{
-
+          //new obj ;
+          $obj = new ProductImage ;
+          $obj->pro_id = ;
+          $obj->path = ;
         }
 
       }
