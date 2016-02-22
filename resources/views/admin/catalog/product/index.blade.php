@@ -11,7 +11,7 @@
   <form class="admin-product-form" action="{{action('Admin\ProductController@destroy')}}" method="post">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <input type="hidden" name="_method" value="POST">
-    <fieldset class="" style="text-right" >
+    <fieldset >
       <button class="button" type="submit" value="Submit">ลบ</button>
       <button class="button" type="reset" value="Reset">ยกเลิก</button>
     </fieldset>

@@ -10,80 +10,43 @@ function ImgPreview(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
 function Add(){
 
-    var html;
+    var html = '' ;
     html += '<div class="image">';
-    html +=  '<input type="file" name="images[]" accept="image/*" onchange="ImageUpload(this)">';
-    html +=  '<img class="preview" />';
+    html +=  '<input type="file" name="images[]" accept="image/*" onchange="ImgPreview(this)">';
+    html +=  '<img class="preview" src="/img/no-images.png"  />';
+    html +=  '<span class="icon destroy_img" onclick="Destroy(this)"><i class="material-icons">close</i> </span>';
     html += '</div>';
 
 
-    $('#image-upload').find('.image:last').after(html);
+      $('#image-upload').append(html);
 
-
-};
-
-
-function ImageUpload(ele) {
-  var imgId = $(ele).parent().find('img').attr('id');
-  var pathname = window.location.pathname;
-  $.ajax({
-      type : 'post',
-      url : pathname,
-      dataType: 'json',
+}
+function Destroy(ele) {
+  var id = $(ele).parent().find('img').attr('id') ;
+  if (id == undefined ){
+      $(ele).parent().remove();
+  }else{
+    $.ajax({
+      type :  "post",
+      url : window.location.pathname+'/ajax/destroy' ,
       data : {
-        id : imgId,
-        file : ele ,
-        path : '',
-        action : 'upload',
-      },
-      success : function(data){
-        vat action = data['action'] ;
-        if (action == 'update') {
-          $(ele).find('img').attr('src',data['path']);
-        }else if (action == 'new'){
-          $(ele).find('img').attr('src',data['path']);
-        }
+        _token : $('form').find( 'input[name=_token]' ).val(),
+        id : id,
+      } ,
+      success : function (data) {
+      console.log(data);
+        $(ele).parent().remove();
+      }
+    });
+  }
+
+  /*
+
+    */
 
 
-      },
-  });
-
-}
-
-function Upload(){
-  $.ajax({
-    url: 'test',
-    type: 'POST',
-    data: {
-      name : 'test',
-    },
-    dataType: 'JSON',
-    success: function (data) {
-        console.log(data);
-        //alert(data);
-    },
-
-  });
-}
-
-
-
-function ImageDestroy(ele) {
-  var imgId = ele.find('img').attr('id');
-
-  $.ajax({
-    method : 'POST',
-    url : '/admin/product/ajax',
-    data : {
-      img_id : '',
-      path : ' ',
-      action : 'destroy',
-    }
-  })
-  .done(function( ){
-    a
-  })
 
 }

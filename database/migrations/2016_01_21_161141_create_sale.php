@@ -28,10 +28,12 @@ class CreateSale extends Migration
           $table->integer('quanlity')->unsigned();
           $table->timestamps('create_at');
         });
-        Schema::create('sale_invoice',function(Blueprint $table){
+        Schema::create('sale_invoice_entity',function(Blueprint $table){
           $table->increments('id');
           $table->integer('cart_id')->unsigned();
           $table->foreign('cart_id')->references('id')->on('sale_cart_entity')->onDelete('cascade');
+          $table->integer('user_id')->unsigned();
+          $table->foreign('user_id')->references('id')->on('customer_entity')->onDelete('cascade');
           $table->float('total')->unsigned();
           $table->string('status');
           $table->timestamps();

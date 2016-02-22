@@ -8,7 +8,7 @@
         <a href="{{ url('/')}}" class="brand-logo"> {{ Auth::user()->user_id }}</a>
       @endif
 
-      <form class="mini-search" action="{{ url('/search')}}">
+      <form class="mini-search" action="{{ url('/search')}}"  method="get">
         <div class="input-field">
           <input id="search" type="search" name="search" required>
           <label for="search"><i class="material-icons">search</i></label>
@@ -24,7 +24,9 @@
           </ul>
         @else
           <ul id='dropdown1' class='dropdown-content'>
+            <li><a href="{{ url('/profile/'.Auth::user()->id) }}">แก้ไขข้อมูลส่วนตัว</a></li>
             <li><a href="{{ url('/logout') }}">ออกจากระบบ</a></li>
+
           </ul>
         @endif
 
@@ -94,7 +96,7 @@
   <div class="container">
     <ul class="menu">
       <li> <a href="{{ url('/') }}">หน้าแรก</a> </li>
-      <li> <a href="{{ url('brand') }}">หมวดหมู่สินค้า</a> </li>
+      <li> <a href="{{ url('brand') }}">แบรนสินค้า</a> </li>
       <li> <a href="{{ url('confirm-payment')}}">แจ้งการโอนเงิน</a> </li>
       <li> <a href="#">เว็บบอร์ด</a> </li>
       <li> <a href="{{ url('contactus')}}">ติดต่อเรา</a> </li>

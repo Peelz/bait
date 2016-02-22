@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 
 use App\Product ;
 use App\Category;
-class CategoryController extends Core
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,7 +20,7 @@ class CategoryController extends Core
     public function index()
     {
         return view('catalog.category.list')
-                ->with('categories',$this->getCategory());
+                ->with('categories',Category::all());
     }
 
     /**

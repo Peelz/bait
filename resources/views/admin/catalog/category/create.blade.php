@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="row">
-  <h1>เพิ่มหมวดหมู่สินค้า</h1>
+  <h1>เพิ่มแบรนสินค้า</h1>
 </div>
 <div class="row">
   <form class="" action="{{ action('Admin\CategoryController@store')}}" method="POST" enctype="multipart/form-data" file="true">
@@ -15,7 +15,7 @@
 
     <div class="row">
       <div class="small-3 columns">
-        <label for="middle-label" class="text-right middle">ชื่อหมวดหมู่ : </label>
+        <label for="middle-label" class="text-right middle">ชื่อแบรน : </label>
       </div>
       <div class="small-9 columns">
         <input type="text" id="middle-label" name="name" placeholder="" value="">
@@ -40,7 +40,51 @@
         <label for="middle-label" class="text-right middle">รูปภาพ: </label>
       </div>
       <div class="small-9 columns">
-        <input type="file" accept="image/*" name="image" value="">
+        <input type="file" accept="image/*" name="image" >
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-3 columns">
+        <label for="middle-label" class="text-right middle">รายชื่อสินค้า</label>
+      </div>
+      <div class="small-9 columns">
+        <table class="hover product-list">
+          <thead>
+            <tr>
+              <th width="50"><input id="checkbox"  class="checkAll" type="checkbox"></th>
+              <th width="80">ID</th>
+              <th width="250">ชื่อ</th>
+              <th width="80">SKU</th>
+              <th width="150">ราคา</th>
+              <th width="150">ราคาพิเศษ</th>
+              <th width="150">เปิดใช้งาน</th>
+              <th width="150">ปริมาณคงเหลือ</th>
+
+              <script type="text/javascript">
+                $('.checkAll').click(function () {
+                    $('input:checkbox').prop('checked', this.checked);
+                });
+              </script>
+
+            </tr>
+          </thead>
+          <tbody>
+            @foreach(App\Product::all() as  $product)
+                  <tr>
+                    <td><input id="checkbox" name="products[]" value="{{$product->id}}" type="checkbox"></td>
+                    <td>{{$product->id}}</a></td>
+                    <td><a href="{{ action('Admin\ProductController@show',$product->id)}}">{{$product->name}}</a></td>
+                    <td>{{$product->sku}}</td>
+                    <td>{{$product->price}}</td>
+                    <td>{{$product->special_price}}</td>
+                    <td>{{$product->is_active}}</td>
+                    <td>{{$product->quanlity}}</td>
+
+                  </tr>
+            @endforeach
+
+          </tbody>
+          </table>
 
       </div>
 

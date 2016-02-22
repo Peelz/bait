@@ -11,10 +11,10 @@ class ProCate extends Model
 
     public function Product()
     {
-      $this->hasMany('App/Product');
+      $this->hasMany('App\Product');
     }
     public function Category()
     {
-      $this->hasMany('App/Category');
+      $this->hasMany('App\Category');
     }
 }

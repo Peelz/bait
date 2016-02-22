@@ -17,3 +17,23 @@ img.preview{
 .product-list td{
   text-align: center;
 }
+.container{
+  margin-top: 50px;
+}
+img.img-payment{
+  max-width: 150px;
+
+}
+
+table,
+table th{
+  text-align: center;
+}
+.dashboard table,
+.dashboard table th{
+  text-align: inherit;
+}
+
+.destroy_img{
+  position: absolute;
+}

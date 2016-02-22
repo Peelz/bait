@@ -14,25 +14,28 @@
   <body class="login-page">
     <div class="container">
       <div class="row">
+
         <div class="card-panel">
-          <div class="card-content">
-            <form class="" action="index.html" method="post">
-              <div class="input-field ">
-                <input placeholder="Username" id="first_name" type="text" class="validate">
-                <label for="first_name">Username</label>
-              </div>
-              <div class="input-field ">
-                <input placeholder="Password" id="first_name" type="password" class="validate">
-                <label for="first_name">Password</label>
-              </div>
-              <button class="btn waves-effect waves-light submit" type="submit" name="action">Submit
+          <form class=""  role="form" action="{{ url('admin/login') }}" method="POST">
+            {!! csrf_field() !!}
+            <div class="card-content">
+                <div class="input-field ">
+                  <input placeholder="E-mail" id="email" type="text" name="email" class="validate">
+                  <label for="email">E-mail</label>
+                </div>
+                <div class="input-field ">
+                  <input placeholder="Password" id="password" type="password" name="password" class="validate">
+                  <label for="password">Password</label>
+                </div>
+            </div>
+            <div class="card-content">
+              <button class="btn waves-effect waves-light submit" type="submit" name="action" style="float:none;">Submit
                 <i class="material-icons right">send</i>
               </button>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-
   </body>
 </html>

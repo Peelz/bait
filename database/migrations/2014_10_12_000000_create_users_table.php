@@ -17,11 +17,20 @@ class CreateUsersTable extends Migration
             $table->string('user_id')->unique();
             $table->string('first_name');
             $table->string('last_name');
+            /* Address */
+            $table->text('address');
+            $table->string('sub_district');
+            $table->string('district');
+            $table->string('province');
+            $table->string('country');
+            $table->integer('post_number')->unsigned();
+            /* */
             $table->string('email')->unique();
             $table->string('password', 60);
             $table->rememberToken();
             $table->timestamps();
         });
+
 
 
     }

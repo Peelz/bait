@@ -11,32 +11,26 @@ use App\Product;
 use App\Cart ;
 
 use Auth ;
-use App\ProductInCart ;
-class ProductController extends Core
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+use App\CartOrder ;
+class ProductController extends Controller{
 
      public function __construct()
      {
         $this->middleware('auth');
-        $this->middleware('web');
+
      }
 
     public function index()
     {
 
       return   view('catalog.product.list')
-              ->with('products',$this->getProduct());
+              ->with('products',Product::all());
     }
 
     public function show($id)
     {
       return   view('catalog.product.view')
-        ->with('product',$this->getProductbyId($id));
+        ->with('product',Product::find($id));
     }
     public function addToCart(Request $req)
     {
@@ -48,7 +42,7 @@ class ProductController extends Core
         'status' => "pending",
       ]);
 
-      $addProduct = new ProductInCart ;
+      $addProduct = new CartOrder ;
       $addProduct->cart_id = $cart->id ;
       $addProduct->pro_id = $req->product ;
       $addProduct->quanlity = $req->qty;

@@ -12,19 +12,20 @@ class Product extends Model
 
   public function Image()
   {
-    return $this->hasMany('App\ProductImage','pro_id');
+    return $this->hasMany('App\ProductImage','pro_id','id');
   }
 
   public function ImageAvatar()
   {
-    return $this->hasOne('App\ProductImage','pro_id');
+    return $this->hasOne('App\ProductImage','pro_id','id');
   }
 
-  public function Price($id){
-    if($this->find($id)->first()->special_rpice > 0 ){
-      return ['special_price'] ;
-    }else {
-      return ['price '];
+  static function getPrice($id){
+    $product = Product::find($id)->first() ;
+    if($product->special_price > 0 && $product->price  ){
+      return $product->special_price ;
+    }else{
+        return $product->price ;
     }
   }
 

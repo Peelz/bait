@@ -15,7 +15,19 @@ class User extends Authenticatable
     protected $table = 'customer_entity';
     //protected $primaryKey = 'user_id';
     protected $fillable = [
-        'id,','user_id','first_name', 'last_name', 'email','password'
+        'id',
+        'user_id',
+        'role',
+        'first_name',
+        'last_name',
+        'email',
+        'password',
+        'address',
+        'sub_district',
+        'district',
+        'province',
+        'country',
+        'post_number',
     ];
 
 
@@ -30,6 +42,28 @@ class User extends Authenticatable
 
     public function Cart()
     {
-        return $this->hasMany('App\Cart');
+        return $this->hasMany('App\Cart','user_id','id');
+    }
+    public function Invoice(){
+        return $this->hasMany('App\Invoice','user_id','id');
+    }
+    public function Role()
+    {
+        return $this->hasOne('App\UserRole','user_id','id');
+    }
+    public function isAdmin()
+    {
+        return $this->hasOne('App\UserRole')->role ;
+    }
+
+    static function getCountUser()
+    {
+      return User::count();
+    }
+
+    static function getLast($count)
+    {
+      $Last = User::orderBy('created_at','desc')->take($count)->get();
+      return $Last ;
     }
 }

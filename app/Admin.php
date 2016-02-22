@@ -2,13 +2,23 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Admin extends Model
+class Admin extends Authenticatable
 {
-    protected $table = 'admin_user';
+    protected $table = 'admin_entity';
 
-    protected $fillable = ['user_id','email'];
+    protected $fillable = [
+        'id',
+        'user_id',
+        'first_name',
+        'last_name',
+        'email',
+        'password',
 
-     
+    ];
+    protected $hidden = [
+      'password', 'remember_token',
+    ];
+
 }

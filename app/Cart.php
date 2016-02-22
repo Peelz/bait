@@ -15,12 +15,12 @@ class Cart extends Model
 
     public function User()
     {
-      return $this->belongTo('App\User','user_id');
+      return $this->hasOne('App\User','id','user_id');
     }
 
     public function Product()
     {
-      return $this->hasMany('App\ProductInCart') ;
+      return $this->hasMany('App\CartOrder','cart_id','id') ;
     }
 
 

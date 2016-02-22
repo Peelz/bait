@@ -38,6 +38,7 @@ class CreateCatalog extends Migration
       Schema::create('catalog_category_entity', function (Blueprint $table) {
           $table->increments('id');
           $table->string('name');
+          $table->string('path');
           $table->boolean('is_active');
           $table->timestamps();
       });

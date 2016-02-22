@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Product;
 use App\Category ;
-use App\ProductInCart ;
+use App\CartOrder ;
 use Auth ;
 use App\User ;
 use App\Cart ;

@@ -2,52 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
 
 use App\Product;
 use App\Category ;
 use App\ProductImage ;
-
-
 use File ;
 
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    public function getProduct()
-    {
-      return Product::all();
-    }
-    public function getCategory()
-    {
-      return Category::all();
-    }
-    public function getProductImage($id)
-    {
-      $images = Product::find($id)->first()->Image;
-      return $images ;
-    }
     public function index(Request $request)
     {
-
-        return view('admin.catalog.product.index')->with('products',$this->getProduct());
-
-
+        return view('admin.catalog.product.index')->with('products',Product::all());
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(Request $request)
     {
 
@@ -56,21 +27,12 @@ class ProductController extends Controller
         return $request->all()['name'];
       }else{
 
-        return view('admin.catalog.product.create')->with('categories',$this->getCategory());
+        return view('admin.catalog.product.create')->with('categories',Category::all());
       }
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-
         $input = $request->all();
-
         $product = new Product ;
         $product->name = $input['name'] ;
         $product->description = $input['description'];
@@ -84,10 +46,7 @@ class ProductController extends Controller
         $product->quanlity = $input['quanlity'];
         $product->save();
         if(!is_null($input['images'])){
-
-
           $path = "/catalog/img/product/".$product->id."/";
-
           foreach ($request->images as $img) {
             $img_product = new ProductImage ;
             $img_product->pro_id = $product->id ;
@@ -103,106 +62,73 @@ class ProductController extends Controller
 
 
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
       $product = Product::find($id);
+      $productImages = $product->Image ;
 
       return view('admin.catalog.product.view')
       ->with('product',$product)
-      ->with('categories',$this->getCategory())
-      ->with('productImages',$this->getProductImage($id)) ;
+      ->with('categories',Category::all())
+      ->with('productImages',$productImages) ;
     }
 
     public function edit($id)
     {
-
       $product = Product::find($id);
+      $productImages = $product->Image ;
 
       return view('admin.catalog.product.view')
       ->with('product',$product)
-      ->with('categories',$this->getCategory())
-      ->with('productImages',$this->getProductImage($id)) ;
+      ->with('categories',Category::all())
+      ->with('productImages',$productImages) ;
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        $input = $request->all() ;
+
         $product = Product::findOrFail($id);
 
-        $product->name = $input['name'] ;
-        $product->description = $input['description'];
-        $product->sku = $input['sku'];
-        $product->price = $input['price'];
-        $product->special_price  = $input['special_price'];
-        if($input['category']!= null){
-          $product->category = $input['category'];
+        $product->name = $request->name ;
+        $product->description = $request->description;
+        $product->sku = $request->sku;
+        $product->price = $request->price;
+        $product->special_price  = $request->special_price;
+        if($request->category!= null){
+          $product->category = $request->category;
         }
-        $product->is_active  = $input['is_active'];
-        $product->quanlity = $input['quanlity'];
-
+        $product->is_active  = $request->is_active;
+        $product->quanlity = $request->quanlity;
+        if( $request->images != null ){
+          $path = "/catalog/img/product/".$product->id."/";
+          foreach ($request->images as $img) {
+            $img_product = new ProductImage ;
+            $img_product->pro_id = $product->id ;
+            $imgName = $img->getClientOriginalName();
+            $img_product->pro_id = $product->id ;
+            $img_product->path = $path.$imgName ;
+            $img->move(public_path($path),$imgName);
+            $img_product->save();
+          }
+        }
         $product->save();
-
-        return redirect('admin/product/'.$id.'/edit');
+        return redirect('admin/product/'.$id);
     }
 
-
-    public function ajax(Request $req)
+    public function ajaxDestroy(Request $req,$id)
     {
-      $path = public_path('catalog/img/product/');
-      $id = $req->id ;
-      $obj = ProductImage::find($id)->first();
-      //Update or create Image
-      if($req->action != 'destroy'){
-
-        if( !is_null($id)){
-          File::delete($obj->path);
-          // new file and move
-        }else{
-          //new obj ;
-          $obj = new ProductImage ;
-          $obj->pro_id = ;
-          $obj->path = ;
-        }
-
-      }
-      // Delete Image
-      else{
-        File::delete($obj->path);
-        return true ;
-      }
-
-
+      $img = ProductImage::find($req->id);
+      File::delete(public_path().$img->path);
+      $img->delete();
+      return 'done';
     }
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Request $request)
     {
-      foreach ($request->product as $product) {
-        $path = "/catalog/img/".$product;
-        File::deleteDirectory(public_path($path));
-      }
 
+      $path = "/catalog/img/".$request->product;
+      File::deleteDirectory(public_path($path));
       Product::destroy($request->product);
 
-      return redirect('admin/product');;
+      return redirect('admin/product');
 
     }
 

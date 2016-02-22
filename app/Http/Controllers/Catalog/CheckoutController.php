@@ -14,7 +14,6 @@ class CheckoutController extends Controller
 {
   function __construct() {
     $this->middleware('web');
-    $this->middleware('auth');
   }
 
   public function getTotalPrice($cart)
@@ -49,24 +48,24 @@ class CheckoutController extends Controller
     $invoice = new Invoice ;
 
     if( !empty($cart)){
-      $total =0;
-      foreach ($cart->Product as $product) {
-        $product->price ;
-        if($product->special_price > 0 ){
-          $total +=  $product->special_price ;
-        }
-        else {
-            $total +=  $product->price ;
+      $total = 0 ;
+      foreach ($cart->Product as $order) {
+        $product = $order->Product ;
+        if($product->special_price > 0 && $product->special_price < $product->price ){
+          $total +=  $product->special_price*$order->quanlity;
+        }else{
+          $total +=  $product->price*$order->quanlity;
         }
       }
 
       $invoice->cart_id = $cart->id ;
       $invoice->total  = $total ;
+      $invoice->user_id = Auth::user()->id;
       $invoice->status = 'pending' ;
       $invoice->save();
       $cart->status = 'confirm';
       $cart->save();
-      return view('catalog.checkout.success');
+      return redirect('checkout/calculate/success');;
     }else{
       return redirect('/');
     }

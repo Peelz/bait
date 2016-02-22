@@ -101,11 +101,11 @@
     </div>
     <div class="row">
       <div class="small-3 columns">
-        <label for="middle-label" class="text-right middle">หมวดหมู่</label>
+        <label for="middle-label" class="text-right middle">แบรน</label>
       </div>
       <div class="small-9 columns">
         <select class="" name="category">
-          <option value="">เลือกหมวดหมู่สินค้า</option>
+          <option value="">เลือกแบรนสินค้า</option>
           @foreach($categories as $category)
             <option value="{{ $category->id }}">{{ $category->name }}</option>
           @endforeach

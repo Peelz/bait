@@ -11,7 +11,6 @@ use App\Product ;
 
 class SearchController extends Controller
 {
-    protected $search ;
 
     public function __construct()
     {
@@ -19,13 +18,14 @@ class SearchController extends Controller
        $this->middleware('web');
     }
 
-    public function index(){
+    public function index(Request $req){
 
-      $products = Product::where('name','like','%'.$this->search.'%')
-        ->where('is_active',1)->get();
+      $products = Product::where('name','LIKE',"%".$req->search."%")
+        ->get();
 
       return view('catalog.search.index')
-              ->with('products',$products);
+              ->with('products',$products)
+              ->with('search',$req->search);
 
     }
 

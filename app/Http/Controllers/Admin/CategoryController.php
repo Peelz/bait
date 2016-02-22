@@ -11,7 +11,7 @@ use App\Product;
 use App\Category ;
 use App\CategoryImage ;
 
-use Storage ;
+
 use File ;
 
 
@@ -25,107 +25,99 @@ class CategoryController extends Controller
     {
       return Category::all();
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Request $request)
     {
-        if($request->isMethod("post")){
-
-        }
-        else{
-          return view('admin.catalog.category.index')->with('categories',$this->getCategory())->with('products',$this->getProduct());
-
-        }
-
+      return view('admin.catalog.category.index')->with('categories',$this->getCategory())->with('products',$this->getProduct());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
+    public function create(){
         return view('admin.catalog.category.create');
     }
+    public function store(Request $request){
+      $category = new Category ;
+      $category->name =  $request->name;
+      $category->is_active =  $request->is_active;
+      $category->save();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+      if( !is_null($request->products)){
+        foreach ($request->products as $id) {
+          $obj = Product::find($id);
+          $obj->category = $category->id;
+          $obj->save();
+        }
+
+      }
+      if(!is_null($request->image)){
+        $img = $request->image;
+        $imgName = $img->getClientOriginalName();
+        $path = "/catalog/img/brand/".$category->id."/";
+        $category->path = $path.$imgName;
+        $img->move(public_path($path),$imgName);
+        $category->save();
+      }
+
+
+      return redirect('admin/category');
+
+
+
+    }
+
+    public function show($id)
     {
-      $cate = new Category ;
-      $input = $request->all() ;
+        return view('admin.catalog.category.view')
+        ->with('category',Category::find($id));
+    }
+
+    public function update(Request $request, $id)
+    {
+      $category = Category::find($id);
+      $category->name = $request->name;
+      $category->is_active = $request->is_active ;
 
 
-      $cate->name = $input['name'];
-      $cate->is_active = $input['is_active'];
-      $cate->save();
+      if( !is_null($request->products) ){
+        if( !is_null($category->Product)){
+          foreach ($category->Product as $product)
+          {
+            $product->category = NULL ;
+            $product->save();
+          }
+        }
 
-      $img = $input['image'];
+        foreach ($request->products as $id) {
+          $obj = Product::find($id);
+          $obj->category = $category->id;
+          $obj->save();
+        }
+      }
 
-      $imgName = $img->getClientOriginalName();
-      $path = "/catalog/img/cate/".$cate->id."/";
-      $cate_img = new CategoryImage;
-      $img->move(public_path($path),$imgName);
-      $cate_img->cate_id = $cate->id ;
-      $cate_img->path = $path.$imgName ;
-      $cate_img->save();
+      if( !empty($request->image)){
+        File::delete(public_path($category->path));
+        $img = $request->image;
+        $imgName = $img->getClientOriginalName();
+        $path = "/catalog/img/brand/".$category->id."/";
+        $category->path = $path.$imgName;
+        $img->move(public_path($path),$imgName);
+        $category->save();
+      }
+      $category->save();
+      return redirect('admin/category');
+    }
 
+    public function destroy($id)
+    {
 
-      Category::create($request->all());
+      $cate = Category::find($id);
+      foreach ($cate->getProduct as $product) {
+        $product->category = NULL ;
+      }
+
+      File::deleteDirectory(public_path('/catalog/img/brand/'.$cate->id));
+      $cate->delete();
       return redirect('admin/category');
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

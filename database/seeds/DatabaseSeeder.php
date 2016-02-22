@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
         $category = array(
           'name' => 'category'.$i,
           'is_active' => 1,
+          'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+          'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         );
         DB::table('catalog_category_entity')->insert($category);
       }
@@ -38,6 +40,8 @@ class DatabaseSeeder extends Seeder
           'special_price' => 800,
           'is_active' => 1,
           'quanlity' => 15,
+          'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+          'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
 
         );
 
@@ -53,27 +57,44 @@ class DatabaseSeeder extends Seeder
           'pro_id' => $i,
           'path' =>  $new,
           'position' => 0,
+          'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+          'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         );
         DB::table('catalog_product_image')->insert($img);
 
-      }
-
-
-
-
+      };
 
       DB::table('customer_entity')->delete();
       $user = array(
-        'user_id' => 'Bank' ,
-        'first_name' => 'Anucha' ,
-        'last_name' => 'Maitrpirom' ,
-        'email' => 'gutten.th@gmail.com' ,
+        'user_id' => 'Nosh' ,
+        'first_name' => 'ABC' ,
+        'last_name' => 'EFG' ,
+        'address' => 'required',
+        'sub_district' => 'required',
+        'district' => 'required',
+        'province' => 'required',
+        'country' => 'required',
+        'post_number' => '10234',
+        'email' => 'test@email.com' ,
         'password' => bcrypt('123123'),
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
         'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
 
       );
       DB::table('customer_entity')->insert($user);
+
+      DB::table('admin_entity')->delete();
+      $admin = array(
+        'user_id' => 'Nosh' ,
+        'first_name' => 'firstname' ,
+        'last_name' => 'lastname' ,
+        'email' => 'test@email.com' ,
+        'password' => bcrypt('123123'),
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+      );
+      DB::table('admin_entity')->insert($admin);
+
     }
 
 }

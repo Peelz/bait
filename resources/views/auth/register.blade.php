@@ -1,7 +1,7 @@
 @extends('catalog.html.page')
 
 @section('title')
-  เข้าสู่ระบบ
+  สมัครสมาชิก
 @endsection
 @section('content')
 
@@ -12,13 +12,13 @@
     <div class="col l12">
 
       <div class="card-panel">
-        <h2> ลงทะเบียน </h2>
+        <h2> สมัครสมาชิก </h2>
         <form class="" action="{{ url('/register')}}" method="post">
           {!! csrf_field() !!}
           <div class="row">
             <div class="input-field col l12">
-              <input id="frist_name" type="text" name="frist_name">
-              <label for="frist_name">ชื่อ</label>
+              <input id="first_name" type="text" name="first_name">
+              <label for="first_name">ชื่อ</label>
             </div>
           </div>
 
@@ -35,6 +35,49 @@
               <label for="user_id">ID</label>
             </div>
           </div>
+
+          <div class="row">
+            <div class="input-field col l12">
+              <textarea id="addressd" class="materialize-textarea" type="text" name="address"></textarea>
+              <label for="address">ที่อยู่</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col l12">
+              <input id="sub_district" type="text" name="sub_district">
+              <label for="sub_district">แขวง/ตำบล</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col l12">
+              <input id="district" type="text" name="district">
+              <label for="district">เขต/อำเภอ</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col l12">
+              <input id="province" type="text" name="province">
+              <label for="province">จังหวัด</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col l12">
+              <input id="post_number" type="text" name="post_number">
+              <label for="post_number">รหัสไปรษณีย์</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col l12">
+              <input id="country" type="text" name="country">
+              <label for="country">ประเทศ</label>
+            </div>
+          </div>
+
 
           <div class="row">
             <div class="input-field col l12">

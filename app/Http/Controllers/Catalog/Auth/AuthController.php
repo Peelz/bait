@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Catalog\Auth;
 
+use Illuminate\Http\Request;
 use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
@@ -28,7 +29,8 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+  protected $redirectTo = '/';
+
 
     /**
      * Create a new authentication controller instance.
@@ -46,27 +48,39 @@ class AuthController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|uniqued:customer_entity',
-            'password' => 'required|confirmed|min:6',
-        ]);
-    }
+     protected function validator(array $data)
+     {
+         return Validator::make($data, [
+             'first_name' => 'required',
+             'last_name' => 'required',
+             'user_id' => 'required|max:255|unique:customer_entity',
+             'address' => 'required',
+             'sub_district' => 'required',
+             'district' => 'required',
+             'province' => 'required',
+             'country' => 'required',
+             'post_number' => 'required|max:5',
+             'email' => 'required|email|max:255|unique:customer_entity',
+             'password' => 'required|confirmed|min:6',
+         ]);
+     }
+     protected function create(array $data)
+     {
+          return User::create([
+             'first_name' => $data['first_name'],
+             'last_name' => $data['last_name'],
+             'user_id' => $data['user_id'],
+             'email' => $data['email'],
+             'address' => $data['address'],
+             'sub_district' => $data['sub_district'],
+             'district' => $data['district'],
+             'province' => $data['province'],
+             'country' => $data['country'],
+             'post_number' => $data['post_number'],
+             'password' => bcrypt($data['password']),
+         ]);
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
-    }
+
+     }
+
 }

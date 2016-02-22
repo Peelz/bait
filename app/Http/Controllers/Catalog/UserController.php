@@ -7,81 +7,44 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use Auth ;
+use App\User ;
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+  public function __construct()
+  {
+     $this->middleware('auth');
+     $this->middleware('web');
+  }
+  public function show($id)
+  {
+    if(Auth::user()->id != $id ){
+      return redirect('/');
+    }else {
+      return view('catalog.user.show')
+      ->with('user', User::find($id) ) ;
     }
+  }
+  public function update(Request $req,$id){
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    $user = User::find($id);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    $user->first_name = $req->first_name ;
+    $user->last_name = $req->last_name ;
+    $user->email = $req->email ;
+    $user->address = $req->address;
+    $user->sub_district = $req->sub_district;
+    $user->district = $req->district;
+    $user->province = $req->province;
+    $user->country = $req->country;
+    $user->post_number = $req->post_number;
+    $user->save();
+    if( !is_null($req->password)){
+      if($req->password == $req->confirm_password){
+        $user->password= bcrypt($req->password);
+      }
     }
+    return redirect('profile/'.$id);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+  }
 }

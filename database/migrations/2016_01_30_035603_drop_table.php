@@ -15,10 +15,11 @@ class DropTable extends Migration
 
       Schema::drop('password_resets');
       Schema::drop('sale_cart_product');
-      Schema::drop('sale_invoice');
+      Schema::drop('sale_invoice_entity');
       Schema::drop('sale_cart_entity');
+      Schema::drop('user_role');
       Schema::drop('customer_entity');
-      Schema::drop('admin_user');
+      Schema::drop('admin_entity');
       Schema::drop('catalog_category_product');
       Schema::drop('catalog_product_image');
       Schema::drop('catalog_product_entity');

@@ -13,14 +13,14 @@
 
       <div class="card col l3">
         <div class="card-image">
-          <img src="{{ '/'.$product->ImageAvatar->path }}">
+          <img src="{{ $product->ImageAvatar->path }}">
         </div>
         <div class="card-content">
           <span class="card-title activator grey-text text-darken-4">{{ $product->name }}</span>
           <p>{{$product->description}}</p>
         </div>
         <div class="card-action">
-          <a  class="btn-buy" href=" {{ url('product',$product->id) }}">This is a link</a>
+          <a  class="btn-buy" href=" {{ url('product',$product->id) }}">รายละเอียดสินค้า > ></a>
         </div>
       </div>
       @endforeach

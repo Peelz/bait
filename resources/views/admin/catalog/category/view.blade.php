@@ -1,101 +1,102 @@
 @extends('admin.html.page')
 @section('title')
-  {{ $product->name }}
+  {{ $category->name }}
 @endsection
 @section('content')
+
 <div class="row">
-  <h1>{{ $product->name }}</h1>
-
+  <h1 class="edit"> แก้ไข : {{ $category->name}}</h1>  <a href="{{ action('Admin\CategoryController@destroy',$category->id) }}" class="alert button">ลบ</a>
 </div>
+<div class="row">
+  <form class="" action="{{ url('admin/category/'.$category->id)}}" method="POST" enctype="multipart/form-data" file="true">
+    <input type="hidden" name="_method" value="PATCH">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-<form class="" action="{{ action('AdminProductController@update',$product->id)}}" method="POST">
-  <input type="hidden" name="_method" value="PATCH">
 
-  <div class="row">
-    <div class="small-3 columns">
-      <label for="middle-label" class="text-right middle">ชื่อ : </label>
+    <div class="row">
+      <div class="small-3 columns">
+        <label for="middle-label" class="text-right middle">ชื่อแบรน : </label>
+      </div>
+      <div class="small-9 columns">
+        <input type="text" id="middle-label" name="name" placeholder="" value=" {{ $category->name }}">
+      </div>
     </div>
-    <div class="small-9 columns">
-      <input type="text" id="middle-label" name="name" placeholder="" value="{{$product->name}}">
-    </div>
-  </div>
+    <div class="row">
+      <div class="small-3 columns">
+        <label for="middle-label" class="text-right middle">เปิดใช้งาน : </label>
+      </div>
+      <div class="small-9 columns">
 
-  <div class="row">
-    <div class="small-3 columns">
-      <label for="middle-label" class="text-right middle">รายละเอียด : </label>
-    </div>
-    <div class="small-9 columns">
-      <textarea type="text" id="middle-label" rows="5" name="description" placeholder="Description">{{$product->description}}</textarea>
-    </div>
-  </div>
-  <div class="row">
-    <div class="small-3 columns">
-      <label for="middle-label" class="text-right middle">SKU : </label>
-    </div>
-    <div class="small-9 columns">
-      <input type="text" id="middle-label"  name="sku" placeholder="" value="{{$product->sku}}">
-    </div>
-  </div>
+        <select name="is_active">
+          <option value="0" >ปิด</option>
+          <option value="1" @if($category->is_active == 1) {{"selected"}} @endif>เปิด</option>
+        </select>
 
-  <div class="row">
-    <div class="small-3 columns">
-      <label for="middle-label" class="text-right middle">ราคา : </label>
+      </div>
     </div>
-    <div class="small-9 columns">
-      <input type="text" id="middle-label" name="price" placeholder="" value="{{$product->price}}">
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="small-3 columns">
-      <label for="middle-label" class="text-right middle">ราคาพิเศษ : </label>
+    <div class="row">
+      <div class="small-3 columns">
+        <label for="middle-label" class="text-right middle">รูปภาพ: </label>
+      </div>
+      <div class="small-9 columns">
+        <input type="file" accept="image/*" name="image" value="">
+        <img class="preview" src="{{ $category->path}}" alt="" />
+      </div>
     </div>
-    <div class="small-9 columns">
-      <input type="text" id="middle-label" name="special_price" placeholder="" value="{{$product->special_price}}">
-    </div>
-  </div>
+    <div class="row">
+      <div class="small-3 columns">
+        <label for="middle-label" class="text-right middle">รายชื่อสินค้า</label>
+      </div>
+      <div class="small-9 columns">
+        <table class="hover product-list">
+          <thead>
+            <tr>
+              <th width="50"><input id="checkbox"  class="checkAll" type="checkbox"></th>
+              <th width="80">ID</th>
+              <th width="250">ชื่อ</th>
+              <th width="80">SKU</th>
+              <th width="150">ราคา</th>
+              <th width="150">ราคาพิเศษ</th>
+              <th width="150">เปิดใช้งาน</th>
+              <th width="150">ปริมาณคงเหลือ</th>
 
-  <div class="row">
-    <div class="small-3 columns">
-      <label for="middle-label" class="text-right middle">ปริมาณ : </label>
-    </div>
-    <div class="small-9 columns">
-      <input type="text" id="middle-label" name="quanlity" placeholder="" value="{{$product->quanlity}}">
-    </div>
-  </div>
+              <script type="text/javascript">
+                $('.checkAll').click(function () {
+                    $('input:checkbox').prop('checked', this.checked);
+                });
+              </script>
 
-  <div class="row">
-    <div class="small-3 columns">
-      <label for="middle-label" class="text-right middle">เปิดใช้งาน : </label>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach(App\Product::all() as  $product)
+                  <tr>
+                    <td><input id="checkbox" @if($product->category == $category->id) checked @endif name="products[]" value="{{$product->id}}" type="checkbox"></td>
+                    <td>{{$product->id}}</a></td>
+                    <td><a href="{{ action('Admin\ProductController@show',$product->id)}}">{{$product->name}}</a></td>
+                    <td>{{$product->sku}}</td>
+                    <td>{{$product->price}}</td>
+                    <td>{{$product->special_price}}</td>
+                    <td>{{$product->is_active}}</td>
+                    <td>{{$product->quanlity}}</td>
+
+                  </tr>
+            @endforeach
+
+          </tbody>
+          </table>
+
+      </div>
+
     </div>
-    <div class="small-9 columns">
 
-      <select class="" name="is_active" value="">
-          <option value="1">เปิด</option>
-          <option value="0">ปิด</option>
-      </select>
-
+    <div class="row">
+      <fieldset class="large-6 large-offset-6 columns" style="text-align:right;">
+        <button class="button" type="submit" value="Submit">Submit</button>
+      </fieldset>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="small-3 columns">
-      <label for="middle-label" class="text-right middle">Image : </label>
-    </div>
-    <div class="small-9 columns">
-      <fieldset>
-        <legend>Photos</legend>
-  	       <input type="file" id="file" accept="image/*" name="file" multiple value="Add photos" onchange="showThumbnails()"/>
-        </fieldset>
-    </div>
-  </div>
-  <div class="row">
-    <fieldset class="large-6 large-offset-6 columns" style="text-align:right;">
-      <button class="button" type="submit" value="Submit">Submit</button>
-      <button class="button" type="reset" value="Reset">Reset</button>
-    </fieldset>
-
-  </div>
-
-</form>
+  </form>
+</div>
 @endsection
