@@ -26,7 +26,7 @@
       @foreach($products as $product)
       <div class="card">
         <div class="card-image">
-          <img src="@if( !empty($product->ImageAvatar->path)) $product->ImageAvatar->path @endif">
+          <img src="@if( !empty($product->ImageAvatar->path)) {{$product->ImageAvatar->path}} @endif">
         </div>
         <div class="card-content">
           <span class="card-title activator grey-text text-darken-4">{{ $product->name }}</span>
